@@ -32,7 +32,8 @@ app.use(session({
   // 目的是为了增加安全性，防止客户端恶意伪造
   secret: 'MYmy',
   resave: false,
-  saveUninitialized: true // 无论你是否使用 Session ，都默认直接给你分配一把钥匙
+  saveUninitialized: false 
+  // true 无论你是否使用 Session ，都默认直接给你分配一把钥匙
   // false 向session存数据才分配
 }))
 
