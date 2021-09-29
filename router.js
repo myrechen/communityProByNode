@@ -46,7 +46,7 @@ router.post('/login', function(req,res){
 
 		return res.status(200).json({
 			err_code: 0,
-	    	message: 'OK'})
+	    message: 'OK'})
 	})
 })
 
@@ -91,7 +91,7 @@ router.post('/register', function(req,res){
   				return res.status(500).json({
         		err_code: 500,
           		message: 'Internal error.'
-				})
+					})
   			}
   			// 成功注册
 
@@ -100,7 +100,7 @@ router.post('/register', function(req,res){
   			req.session.user = data
 
   			return res.status(200).json({
-  			err_code: 0,
+  				err_code: 0,
         	message: 'OK'})
   		})
   		//console.log('ok')
@@ -114,6 +114,10 @@ router.get('/logout', function (req, res) {
   req.session.user = null
 
   res.redirect('/')
+})
+
+router.get('/settings/profile', function(req, res){
+	res.render('settings/profile.html', {user:req.session.user})
 })
 
 module.exports = router
