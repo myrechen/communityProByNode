@@ -116,8 +116,13 @@ router.get('/logout', function (req, res) {
   res.redirect('/')
 })
 
+// 根据路由改变导航栏样式，目前想到的办法：服务端渲染
 router.get('/settings/profile', function(req, res){
-	res.render('settings/profile.html', {user:req.session.user})
+	res.render('settings/profile.html', {user:req.session.user, status1:'active'})
+})
+
+router.get('/settings/admin', function(req, res){
+	res.render('settings/admin.html', {user:req.session.user, status2:'active'})
 })
 
 module.exports = router
