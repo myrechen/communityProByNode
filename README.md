@@ -25,3 +25,9 @@
     > md5加密
     > npm install blueimp-md5
     > var md5 = require('blueipm-md5')
+
+## 4.处理设置页请求
+    - 处理设置页路由
+    - 渲染设置页
+
+
