@@ -116,6 +116,7 @@ router.get('/logout', function (req, res) {
   res.redirect('/')
 })
 
+// 进入设置用户信息页面
 // 根据路由改变导航栏样式，目前想到的办法：服务端渲染
 router.get('/settings/profile', function(req, res){
 	res.render('settings/profile.html', {user:req.session.user, status1:'active'})
@@ -123,6 +124,25 @@ router.get('/settings/profile', function(req, res){
 
 router.get('/settings/admin', function(req, res){
 	res.render('settings/admin.html', {user:req.session.user, status2:'active'})
+})
+
+// 处理注销账户请求
+router.get('/settings/delete', function(req, res){
+	User.deleteOne({email:req.session.user.email}, function(err,data){
+		if(err){
+			return res.status(500).json({
+        		err_code:500,
+        		message: err.message
+        	})
+		}
+		// 注销成功
+		// 先清除session
+		req.session.user = null
+		res.status(200).json({
+        err_code:0,
+        message:'OK'
+    })
+	})
 })
 
 module.exports = router
