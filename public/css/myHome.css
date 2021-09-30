@@ -1,0 +1,22 @@
+html,body
+{
+    height: 100%;
+}
+
+#copyright
+{
+	color: red;
+}
+
+#container{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.headContainer{ flex: 0 0 auto; }
+
+.homeBody{ flex: 1 0 auto;}
+
+.footContainer{ flex: 0 0 auto; }
+
