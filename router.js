@@ -145,4 +145,8 @@ router.get('/settings/delete', function(req, res){
 	})
 })
 
+router.get('/topic/new',function(req, res){
+	res.render('topic/new.html', {user:req.session.user})
+})
+
 module.exports = router
