@@ -6,13 +6,19 @@
   <title>{{block 'title'}}默认标题{{/block}}</title>
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
   <link rel="icon" href="/public/img/favicon.ico">
+  <link rel="stylesheet" href="/public/css/myHome.css">
   {{block 'head'}}{{/block}}
 </head>
 
 <body>
+  <div id="container">
   {{include '../_partials/header.html'}}
-  {{block 'body'}}{{/block}}
+  <div class="homeBody">
+    {{block 'body'}}{{/block}}
+  </div>
+  
   {{include '../_partials/footer.html'}}
+  </div>
   <script src="/node_modules/jquery/dist/jquery.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
   {{block 'script'}}{{/block}}
