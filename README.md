@@ -4,15 +4,20 @@
 
 ## 2.路由设计
 
-|  请求路径 | 请求方法 | get参数 |         post参数         | 是否需要登录权限 |     备注     |
-|-----------|----------|---------|--------------------------|------------------|--------------|
-| /         | get      |         |                          |                  | 首页         |
-| /register | get      |         |                          |                  | 注册页面     |
-| /register | post     |         | email,nickname,passsword |                  | 提交注册请求 |
-| /login    | get      |         |                          |                  | 登录页面     |
-| /login    | post     |         | email，password          |                  | 提交登录请求 |
-| /logout   | get      |         |                          |                  | 退出登录     |
-|           |          |         |                          |                  |              |
+|      请求路径     | 请求方法 | get参数  |         post参数         | 是否需要登录权限 |       备注       |
+|-------------------|----------|----------|--------------------------|------------------|------------------|
+| /                 | get      |          |                          |                  | 首页             |
+| /register         | get      |          |                          |                  | 注册页面         |
+| /register         | post     |          | email,nickname,passsword |                  | 提交注册请求     |
+| /login            | get      |          |                          |                  | 登录页面         |
+| /login            | post     |          | email，password          |                  | 提交登录请求     |
+| /logout           | get      |          |                          |                  | 退出登录         |
+| /settings/profile | get      |          |                          | 是               | 进入设置页面     |
+| /settings/admin   | get      |          |                          | 是               | 进入修改密码页   |
+| /settings/admin   | post     |          | oldpassword,newpassword  | 是               | 提交修改密码请求 |
+| /settings/delete  | get      | email    |                          | 是               | 注销账户请求     |
+| /topic/new        | get      | nickname |                          | 是               | 进入写博客页面   |
+|                   |          |          |                          |                  |                  |
 
 ## 3.处理注册请求
     - 获取表单数据
@@ -29,5 +34,14 @@
 ## 4.处理设置页请求
     - 处理设置页路由
     - 渲染设置页
+
+## 5.进入修改密码页请求
+
+## 6.处理注销账户请求
+
+## 7.进入写文章页请求
+
+## 8.提交修改密码请求
+
 
 
