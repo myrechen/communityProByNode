@@ -10,18 +10,18 @@
       <h2>修改密码</h2>
     </div>
     <hr>
-    <form>
+    <form id="modifyPwd_form">
       <div class="form-group">
         <label for="exampleInputPassword1">当前密码</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="">
+        <input type="password" class="form-control" id="oldPassword" name="oldPassword">
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">新的密码</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="">
+        <input type="password" class="form-control" id="newPassword" name="newPassword">
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">确认密码</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="">
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
       </div>
       <button type="submit" class="btn btn-success">保存</button>
     </form>
@@ -41,6 +41,46 @@
 
 {{block 'script'}}
 <script type="text/javascript">
+  $('#modifyPwd_form').on('submit',function(e){
+    //submit时阻止默认事件, 进行异步提交
+    e.preventDefault()
+    const oldPwd = $('#oldPassword').val()
+    const newPwd = $('#newPassword').val()
+    const confirm = $('#confirmPassword').val()
+
+    if(oldPwd === '' || newPwd === '' || confirm === ''){
+      window.alert('输入不能为空')
+    }
+    else if(confirm !== newPwd){
+      window.alert("新密码不一致，请检查后重新输入！")
+    }
+    else if(oldPwd === newPwd){
+      window.alert('新密码不能与原密码相同')
+    }
+    else {
+      var formData = $(this).serialize()
+      $.ajax({
+        url: '/settings/admin',
+        type: 'post',
+        data: formData,
+        dataType: 'json',
+        success: function (data){
+          var err_code = data.err_code
+          if (err_code === 0) {
+            window.alert('修改成功,请重新登录')
+            window.location.href = '/login'
+          } else if (err_code === 1) {
+            window.alert('当前密码不正确')
+          } 
+          else if (err_code === 500) {
+            window.alert('服务器忙，请稍后重试')
+          }
+        }
+      })
+    }
+
+  })
+
   $('#delete_user').on('click', function(e){
     if (window.confirm("确定要注销此账号吗?")){
       // 确定注销后发起请求
