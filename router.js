@@ -126,6 +126,49 @@ router.get('/settings/admin', function(req, res){
 	res.render('settings/admin.html', {user:req.session.user, status2:'active'})
 })
 
+// 处理修改密码请求
+router.post('/settings/admin', function(req,res){
+	var body = req.body
+	console.log(body,req.session.user.email)
+	User.findOne({
+		email: req.session.user.email,
+		password: md5(md5(body.oldPassword)+'MYOUNG')
+		}, function(err,data){
+			if(err){
+				return res.status(500).json({
+	        		err_code:500,
+	        		message: err.message
+	        	})
+			}
+
+			// 数据库中没有密码匹配的用户
+			if(! data){
+				return res.status(200).json({
+	        		err_code: 1,
+	        		message: 'Password error.'
+				})
+			}
+
+			// 匹配成功 修改密码
+			var newPwd = md5(md5(body.newPassword)+'MYOUNG')
+			User.findOneAndUpdate({email: req.session.user.email},{
+				$set:{ password: newPwd }},{}, function(err,data){
+					if(err){
+						return res.status(500).json({
+	        		err_code:500,
+	        		message: err.message
+	        	})
+					}
+					// 清除session，重新登录
+					req.session.user = null
+					return res.status(200).json({
+						err_code: 0,
+		    		message: 'OK'
+		    	})
+			})
+	})
+})
+
 // 处理注销账户请求
 router.get('/settings/delete', function(req, res){
 	User.deleteOne({email:req.session.user.email}, function(err,data){
