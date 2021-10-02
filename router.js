@@ -122,6 +122,62 @@ router.get('/settings/profile', function(req, res){
 	res.render('settings/profile.html', {user:req.session.user, status1:'active'})
 })
 
+router.post('/settings/profile', function(req,res)
+{
+	var body = req.body
+	console.log(body)
+	User.findOne
+	({
+		//查询昵称是否重复
+		nickname:body.nickname
+	}, function(err,data){
+		if(err){
+			return res.status(500).json({
+    		err_code:500,
+    		message: err.message
+    	})
+		}
+		if (data && data.email !== req.session.user.email) {
+  		// 昵称已存在
+  		return res.status(200).json({
+    		err_code: 1,
+    		message: 'Nickname aleady exists.'
+			})
+  	}
+  	User.findOneAndUpdate({email: req.session.user.email},{
+  		$set:{
+  			nickname:body.nickname,
+  			bio:body.bio,
+  			gender:body.gender,
+  			birthday:body.birthday
+  		}},{},function(err,data){
+  			if(err){
+					return res.status(500).json({
+        		err_code:500,
+        		message: err.message
+        	})
+				}
+				
+				User.findOne({email: req.session.user.email},function(err,data){
+					if(err){
+						return res.status(500).json({
+        			err_code:500,
+        			message: err.message
+        		})
+					}
+					// 更新session中的信息
+					req.session.user = null
+					req.session.user = data
+					return res.status(200).json({
+						err_code: 0,
+	    			message: 'OK'
+	    		})
+				})
+  		})
+	})
+})
+
+
 router.get('/settings/admin', function(req, res){
 	res.render('settings/admin.html', {user:req.session.user, status2:'active'})
 })
