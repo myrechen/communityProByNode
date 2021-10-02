@@ -46,7 +46,8 @@ var userSchema = new Schema({
 		default: -1
 	},
 	birthday: {
-		type: Date
+		type: String,
+		default: ''
 	},
   	status: {
     	type: Number,
@@ -57,6 +58,8 @@ var userSchema = new Schema({
 	    default: 0
   }
 })
+
+// birthday类型改为string，mongo的Date类型ISODate数据用来渲染html不方便转换，也不方便写回
 
 // 导出模型
 module.exports = mongoose.model('User', userSchema)
