@@ -58,7 +58,7 @@
           <input type="button" id="avatarbtn" value="选择头像" onclick="avatarfile.click()">
           <br><br>
           
-          <button class="btn btn-default" id="upload">上传</button>
+          <button type="submit" class="btn btn-default" id="upload">上传</button>
         </form>
         </div>
 
@@ -95,7 +95,11 @@
     })
   })
 
-  $('#upload').on('click',function(){
+  // 使用button的click事件收不到响应，不能重定向
+  // 要使用form的submit事件
+  $('#avatar_form').on('submit', function(e){
+    //submit时阻止默认事件, 进行异步提交
+    e.preventDefault()
     var file = document.getElementById('avatarfile')
     //创建formdata对象
     var formData = new FormData();
@@ -112,8 +116,7 @@
         var err_code = data.err_code
         if (err_code === 0) {
           window.alert('上传成功')
-        } else if (err_code === 1) {
-          window.alert('上传失败，请重试')
+          window.location.href = '/settings/profile'
         } 
         else if (err_code === 500) {
           window.alert('服务器忙，请稍后重试')
