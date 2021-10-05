@@ -197,10 +197,11 @@ var upload = multer({storage: storage});
 /* 修改头像 */
 router.post('/settings/avatar',upload.single('file'), function(req,res){
 	// single方法,表示上传单个文件,参数为表单数据对应的key
-	// 图片已经被放入到服务器里,且req也已经被upload中间件给处理好了(加上了file等信息）
-	console.log(req)
-	/* req.file中：
-		   { fieldname: 'file',
+	// 图片已经被放入到服务器里,且req也已经被upload中间件给处理好了(加上了file等信息
+	var avatarPath = '/'+req.file.path
+	console.log(avatarPath)
+	/* req中：
+	  file: { fieldname: 'file',
 		     originalname: 'avatar-max-img.png',
 		     encoding: '7bit',
 		     mimetype: 'image/png',
@@ -208,11 +209,27 @@ router.post('/settings/avatar',upload.single('file'), function(req,res){
 		     filename: 'admin1@qq.com1633413393210avatar-max-img.png',
 		     path:
 		      'public/avatarImgs/admin1@qq.com1633413393210avatar-max-img.png',
-		     size: 1325 } }
-	*/
-	// 现在只需要将头像路径存到用户数据库信息表中的avatar中，就可以让它指向新的头像文件
-	// 服务端重新渲染，就可以显示新头像
+		     size: 1325 } }*/
 
+	// 现在只需要将头像路径存到用户数据库信息表中的avatar中，就可以让它指向新的头像文件
+	User.findOneAndUpdate({email:req.session.user.email},{avatar:avatarPath},
+		{new:true}, function(err,data){
+			if(err){
+				return res.status(500).json({
+	        		err_code:500,
+	        		message: err.message
+	        	})
+			}
+			// 更新session中的信息
+			req.session.user = null
+			req.session.user = data
+			console.log(req.session.user)
+			return res.status(200).json({
+				err_code: 0,
+    			message: 'OK'
+    		})
+	})
+	// 服务端重新渲染，就可以显示新头像
 })
 /* 修改头像end*/
 
@@ -250,9 +267,9 @@ router.post('/settings/admin', function(req,res){
 				$set:{ password: newPwd }},{}, function(err,data){
 					if(err){
 						return res.status(500).json({
-	        		err_code:500,
-	        		message: err.message
-	        	})
+			        		err_code:500,
+			        		message: err.message
+		        		})
 					}
 					// 清除session，重新登录
 					req.session.user = null
