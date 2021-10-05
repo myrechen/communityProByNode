@@ -6,6 +6,8 @@ var User = require('./models/user.js')
 
 var md5 = require('blueimp-md5')
 
+var multer = require('multer')
+
 // 主页请求
 router.get('/', function(req,res){
 	res.render('index.html',{
@@ -176,6 +178,43 @@ router.post('/settings/profile', function(req,res)
   		})
 	})
 })
+
+
+// 配置diskStorage来控制文件存储的位置以及文件名字等
+var storage = multer.diskStorage({
+    // 确定图片存储的位置
+    destination: function (req, file, cb){
+        cb(null, './public/avatarImgs')
+    },
+    // 确定图片存储时的名字, 如果使用原名，可能会造成再次上传同一张图片的时候的冲突
+    filename: function (req, file, cb){
+        cb(null, req.session.user.email+Date.now()+file.originalname)
+    }
+});
+// 生成的专门处理上传的一个工具，可以传入storage、limits等配置
+var upload = multer({storage: storage});
+
+/* 修改头像 */
+router.post('/settings/avatar',upload.single('file'), function(req,res){
+	// single方法,表示上传单个文件,参数为表单数据对应的key
+	// 图片已经被放入到服务器里,且req也已经被upload中间件给处理好了(加上了file等信息）
+	console.log(req)
+	/* req.file中：
+		   { fieldname: 'file',
+		     originalname: 'avatar-max-img.png',
+		     encoding: '7bit',
+		     mimetype: 'image/png',
+		     destination: './public/avatarImgs',
+		     filename: 'admin1@qq.com1633413393210avatar-max-img.png',
+		     path:
+		      'public/avatarImgs/admin1@qq.com1633413393210avatar-max-img.png',
+		     size: 1325 } }
+	*/
+	// 现在只需要将头像路径存到用户数据库信息表中的avatar中，就可以让它指向新的头像文件
+	// 服务端重新渲染，就可以显示新头像
+
+})
+/* 修改头像end*/
 
 
 router.get('/settings/admin', function(req, res){
