@@ -6,27 +6,47 @@
 <section class="container">
   <div class="row">
     <div class="col-md-5">
-      <form>
+      <form id="new_form">
         <div class="form-group">
           <label for="exampleInputEmail1">选择板块</label>
-          <select class="form-control">
-            <option>分享</option>
-            <option>问答</option>
-            <option>招聘</option>
-            <option>客户端测试</option>
+          <select class="form-control" name="section">
+            <option value="0">分享</option>
+            <option value="1">问答</option>
+            <option value="2">招聘</option>
+            <option value="3">客户端测试</option>
           </select>
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">标题</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+          <input type="text" class="form-control" id="title" name="title">
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">内容</label>
-          <textarea class="form-control" rows="3"></textarea>
+          <textarea class="form-control" rows="3" name="content"></textarea>
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-default" id="publish">发表</button>
       </form>
     </div>
   </div>
 </section>
+{{/block}}
+
+{{block 'script'}}
+<script type="text/javascript">
+  $('#new_form').on('submit', function(e){
+    //submit时阻止默认事件, 进行异步提交
+    e.preventDefault()
+    //表单序列化
+    var formData = $(this).serialize()
+    $.ajax({
+      url: '/topic/new',
+      type: 'post',
+      data: formData,
+      dataType: 'json',
+      success: function (data){
+
+      }
+    })
+  })
+</script>
 {{/block}}
