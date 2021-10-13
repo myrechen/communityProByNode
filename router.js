@@ -4,6 +4,8 @@ var router = express.Router()
 
 var User = require('./models/user.js')
 
+var Topic = require('./models/topic.js')
+
 var md5 = require('blueimp-md5')
 
 var multer = require('multer')
@@ -302,6 +304,11 @@ router.get('/settings/delete', function(req, res){
 
 router.get('/topic/new',function(req, res){
 	res.render('topic/new.html', {user:req.session.user})
+})
+
+router.post('/topic/new', function(req, res){
+	console.log(req.session.user.email)
+	console.log(req.body)
 })
 
 module.exports = router
