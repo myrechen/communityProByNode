@@ -306,9 +306,23 @@ router.get('/topic/new',function(req, res){
 	res.render('topic/new.html', {user:req.session.user})
 })
 
-router.post('/topic/new', function(req, res){
-	console.log(req.session.user.email)
-	console.log(req.body)
+router.post('/topic/new', async function(req, res){
+	var body = req.body
+	body.email = req.session.user.email
+	console.log(body)
+	try {
+		await new Topic(body).save()
+		res.status(200).json({
+  			err_code: 0,
+        	message: 'OK'
+        })
+	}
+	catch(err){
+		res.status(500).json({
+			err_code: 500,
+	  		message: err.message
+		})
+	}
 })
 
 module.exports = router
