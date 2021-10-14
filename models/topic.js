@@ -34,3 +34,7 @@ var topicSchema = new Schema({
 		default:Date.now
 	}
 })
+
+// 导出模型
+module.exports = mongoose.model('Topic', topicSchema)
+
