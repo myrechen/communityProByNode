@@ -44,7 +44,14 @@
       data: formData,
       dataType: 'json',
       success: function (data){
-
+        var err_code = data.err_code
+        if (err_code === 0) {
+          window.alert('发表成功')
+          window.location.href = '/topic/new'
+        } 
+        else if (err_code === 500) {
+          window.alert('服务器忙，请稍后重试')
+        }
       }
     })
   })
